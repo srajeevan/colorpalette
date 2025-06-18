@@ -1,26 +1,176 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: linear-gradient(135deg, #fef7ed 0%, #fff7ed 50%, #fef3c7 100%);
+  --foreground: #1f2937;
+  --primary: #dc2626;
+  --primary-foreground: #ffffff;
+  --secondary: #fbbf24;
+  --secondary-foreground: #92400e;
+  --accent: #059669;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #f59e0b;
+  --input: #fef3c7;
+  --ring: #dc2626;
+  --artist-red: #dc2626;
+  --artist-blue: #2563eb;
+  --artist-yellow: #fbbf24;
+  --artist-green: #059669;
+  --artist-purple: #7c3aed;
+  --artist-orange: #ea580c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: linear-gradient(135deg, #fef7ed 0%, #fff7ed 50%, #fef3c7 100%);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Artistic paint brush effects */
+.paint-brush-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.paint-brush-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #dc2626, #fbbf24, #059669, #2563eb, #7c3aed, #ea580c);
+  border-radius: inherit;
+  z-index: -1;
+  animation: paint-flow 3s ease-in-out infinite;
+}
+
+@keyframes paint-flow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Artistic color swatches */
+.color-swatch {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.color-swatch:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Paint palette effect */
+.palette-effect {
+  background: radial-gradient(circle at 30% 70%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 50% 50%, rgba(5, 150, 105, 0.1) 0%, transparent 50%);
+}
+
+/* Artistic button styles */
+.artist-button {
+  background: linear-gradient(135deg, var(--artist-red) 0%, var(--artist-orange) 100%);
+  border: none;
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+  transition: all 0.3s ease;
+}
+
+.artist-button:hover {
+  background: linear-gradient(135deg, var(--artist-orange) 0%, var(--artist-red) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+/* Tab styling with paint colors */
+.artist-tab {
+  position: relative;
+  overflow: hidden;
+}
+
+.artist-tab.active {
+  background: linear-gradient(135deg, var(--artist-red) 0%, var(--artist-orange) 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.artist-tab:not(.active) {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--artist-yellow);
+}
+
+.artist-tab:not(.active):hover {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: var(--artist-orange);
+  transform: translateY(-1px);
+}
+
+/* Custom scrollbar for better aesthetics */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Smooth transitions for interactive elements */
+button, a, input, select, textarea {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Print styles for color palettes */
+@media print {
+  body {
+    background: white;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
 }
