@@ -4,7 +4,6 @@ import React from 'react'
 import { Download, Copy } from 'lucide-react'
 import { Button } from './ui/button'
 import { ColorInfo } from '@/lib/imageProcessing'
-import { cn } from '@/lib/utils'
 
 interface ColorPaletteProps {
   colors: ColorInfo[]

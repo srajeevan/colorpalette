@@ -24,19 +24,7 @@ export function ImageUploader({ onImageUpload, isProcessing = false }: ImageUplo
     setIsDragOver(false)
   }, [])
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(false)
-    
-    const files = Array.from(e.dataTransfer.files)
-    const imageFile = files.find(file => file.type.startsWith('image/'))
-    
-    if (imageFile) {
-      handleFileSelect(imageFile)
-    }
-  }, [])
-
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) {
       alert('Please select an image file (JPEG, PNG, WebP)')
       return
@@ -51,7 +39,19 @@ export function ImageUploader({ onImageUpload, isProcessing = false }: ImageUplo
 
     // Pass file to parent
     onImageUpload(file)
-  }
+  }, [onImageUpload])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
+    
+    const files = Array.from(e.dataTransfer.files)
+    const imageFile = files.find(file => file.type.startsWith('image/'))
+    
+    if (imageFile) {
+      handleFileSelect(imageFile)
+    }
+  }, [handleFileSelect])
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]

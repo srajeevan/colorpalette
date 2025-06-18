@@ -82,7 +82,7 @@ export class ImageProcessor {
     // Use k-means clustering to find dominant colors
     const clusters = this.kMeansCluster(colors, numColors)
     
-    return clusters.map((cluster, index) => {
+    return clusters.map((cluster) => {
       const centroid = cluster.centroid
       const hex = rgbToHex(
         Math.round(centroid.r),

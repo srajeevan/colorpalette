@@ -323,7 +323,7 @@ export default function Home() {
             <h3 className="font-semibold text-amber-900 mb-3">Why Artists Choose Our Color Analysis Tool</h3>
             <p className="text-amber-800">
               Our <strong>free color palette generator</strong> uses advanced algorithms to provide accurate color analysis for <strong>oil painting</strong>, 
-              <strong>watercolor</strong>, and <strong>acrylic painting</strong>. Whether you're a beginner learning <strong>color theory</strong> or a 
+              <strong>watercolor</strong>, and <strong>acrylic painting</strong>. Whether you&apos;re a beginner learning <strong>color theory</strong> or a 
               professional artist working on <strong>commissioned paintings</strong>, our tool helps you understand <strong>color relationships</strong>, 
               <strong>value structures</strong>, and <strong>temperature variations</strong> in your reference images.
             </p>
