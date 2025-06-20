@@ -351,26 +351,47 @@ export class ImageProcessor {
 
   private createSquintLevelsMobile(img: HTMLImageElement): string[] {
     const levels = []
-    const blurRadii = [8, 16, 24, 32] // More conservative blur values for mobile
+    const blurRadii = [4, 8, 12, 16] // Conservative blur values for mobile
     
     for (const radius of blurRadii) {
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')!
       
       // Use smaller canvas size for mobile performance
-      const scale = Math.min(1, 600 / Math.max(img.width, img.height))
+      const scale = Math.min(1, 400 / Math.max(img.width, img.height))
       canvas.width = img.width * scale
       canvas.height = img.height * scale
       
-      // Draw the image first
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-      
-      // Apply manual blur using box blur algorithm
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      const blurredData = this.applyBoxBlur(imageData, radius * scale)
-      ctx.putImageData(blurredData, 0, 0)
-      
-      levels.push(canvas.toDataURL())
+      // Try CSS filter first (simpler approach)
+      try {
+        ctx.filter = `blur(${radius}px)`
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+        
+        // Test if the filter worked by checking if canvas has content
+        const testData = ctx.getImageData(0, 0, 1, 1)
+        if (testData.data[3] === 0) {
+          throw new Error('CSS filter failed')
+        }
+        
+        levels.push(canvas.toDataURL())
+      } catch (error) {
+        // Fallback: Create a simple blur effect by drawing multiple times with opacity
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.globalAlpha = 0.3
+        
+        // Draw the image multiple times with slight offsets to create blur effect
+        const iterations = Math.min(radius, 8)
+        for (let i = 0; i < iterations; i++) {
+          const offset = i * 0.5
+          ctx.drawImage(img, -offset, -offset, canvas.width + offset * 2, canvas.height + offset * 2)
+          ctx.drawImage(img, offset, -offset, canvas.width - offset * 2, canvas.height + offset * 2)
+          ctx.drawImage(img, -offset, offset, canvas.width + offset * 2, canvas.height - offset * 2)
+          ctx.drawImage(img, offset, offset, canvas.width - offset * 2, canvas.height - offset * 2)
+        }
+        
+        ctx.globalAlpha = 1.0
+        levels.push(canvas.toDataURL())
+      }
     }
     
     return levels
