@@ -40,7 +40,31 @@ export function SquintViewer({ originalImage, squintLevels }: SquintViewerProps)
 
       {/* Level Controls */}
       <div className="mb-6">
-        <div className="flex flex-wrap gap-2 justify-center">
+        {/* Mobile: Grid layout */}
+        <div className="grid grid-cols-2 gap-2 sm:hidden">
+          {levels.map((level, index) => (
+            <Button
+              key={index}
+              variant={currentLevel === index ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setCurrentLevel(index)}
+              className={cn(
+                "flex items-center justify-center gap-1 px-2 py-2 text-xs",
+                currentLevel === index && "ring-2 ring-blue-500"
+              )}
+            >
+              {index === 0 ? (
+                <EyeOff className="h-3 w-3" />
+              ) : (
+                <Eye className="h-3 w-3" />
+              )}
+              <span className="whitespace-nowrap">{level.name}</span>
+            </Button>
+          ))}
+        </div>
+
+        {/* Desktop: Horizontal layout */}
+        <div className="hidden sm:flex flex-wrap gap-2 justify-center">
           {levels.map((level, index) => (
             <Button
               key={index}

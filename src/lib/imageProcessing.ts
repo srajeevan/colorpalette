@@ -306,6 +306,31 @@ export class ImageProcessor {
   }
 
   private createSquintLevels(img: HTMLImageElement): string[] {
+    const isMobile = this.detectMobile()
+    
+    if (isMobile) {
+      return this.createSquintLevelsMobile(img)
+    } else {
+      return this.createSquintLevelsDesktop(img)
+    }
+  }
+
+  private detectMobile(): boolean {
+    // Check for mobile user agents
+    const userAgent = navigator.userAgent.toLowerCase()
+    const mobileKeywords = ['mobile', 'android', 'iphone', 'ipad', 'ipod', 'blackberry', 'windows phone']
+    const isMobileUA = mobileKeywords.some(keyword => userAgent.includes(keyword))
+    
+    // Check for touch capability
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    
+    // Check screen size (mobile-like dimensions)
+    const isSmallScreen = window.innerWidth <= 768
+    
+    return isMobileUA || (isTouchDevice && isSmallScreen)
+  }
+
+  private createSquintLevelsDesktop(img: HTMLImageElement): string[] {
     const levels = []
     const blurRadii = [16, 32, 48, 64]
     
@@ -322,5 +347,115 @@ export class ImageProcessor {
     }
     
     return levels
+  }
+
+  private createSquintLevelsMobile(img: HTMLImageElement): string[] {
+    const levels = []
+    const blurRadii = [8, 16, 24, 32] // More conservative blur values for mobile
+    
+    for (const radius of blurRadii) {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')!
+      
+      // Use smaller canvas size for mobile performance
+      const scale = Math.min(1, 600 / Math.max(img.width, img.height))
+      canvas.width = img.width * scale
+      canvas.height = img.height * scale
+      
+      // Draw the image first
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      
+      // Apply manual blur using box blur algorithm
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      const blurredData = this.applyBoxBlur(imageData, radius * scale)
+      ctx.putImageData(blurredData, 0, 0)
+      
+      levels.push(canvas.toDataURL())
+    }
+    
+    return levels
+  }
+
+  private applyBoxBlur(imageData: ImageData, radius: number): ImageData {
+    const { width, height, data } = imageData
+    const output = new ImageData(width, height)
+    const outputData = output.data
+    
+    // Copy original data
+    for (let i = 0; i < data.length; i++) {
+      outputData[i] = data[i]
+    }
+    
+    // Apply horizontal blur
+    this.boxBlurHorizontal(outputData, width, height, radius)
+    
+    // Apply vertical blur
+    this.boxBlurVertical(outputData, width, height, radius)
+    
+    return output
+  }
+
+  private boxBlurHorizontal(data: Uint8ClampedArray, width: number, height: number, radius: number): void {
+    const temp = new Uint8ClampedArray(data.length)
+    
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        let r = 0, g = 0, b = 0, a = 0, count = 0
+        
+        for (let dx = -radius; dx <= radius; dx++) {
+          const nx = Math.max(0, Math.min(width - 1, x + dx))
+          const idx = (y * width + nx) * 4
+          
+          r += data[idx]
+          g += data[idx + 1]
+          b += data[idx + 2]
+          a += data[idx + 3]
+          count++
+        }
+        
+        const idx = (y * width + x) * 4
+        temp[idx] = r / count
+        temp[idx + 1] = g / count
+        temp[idx + 2] = b / count
+        temp[idx + 3] = a / count
+      }
+    }
+    
+    // Copy back to original data
+    for (let i = 0; i < data.length; i++) {
+      data[i] = temp[i]
+    }
+  }
+
+  private boxBlurVertical(data: Uint8ClampedArray, width: number, height: number, radius: number): void {
+    const temp = new Uint8ClampedArray(data.length)
+    
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        let r = 0, g = 0, b = 0, a = 0, count = 0
+        
+        for (let dy = -radius; dy <= radius; dy++) {
+          const ny = Math.max(0, Math.min(height - 1, y + dy))
+          const idx = (ny * width + x) * 4
+          
+          r += data[idx]
+          g += data[idx + 1]
+          b += data[idx + 2]
+          a += data[idx + 3]
+          count++
+        }
+        
+        const idx = (y * width + x) * 4
+        temp[idx] = r / count
+        temp[idx + 1] = g / count
+        temp[idx + 2] = b / count
+        temp[idx + 3] = a / count
+      }
+    }
+    
+    // Copy back to original data
+    for (let i = 0; i < data.length; i++) {
+      data[i] = temp[i]
+    }
   }
 }

@@ -152,29 +152,104 @@ export default function Home() {
             <h2 id="analysis-heading" className="sr-only">Color Analysis Results</h2>
             
             {/* Tab Navigation */}
-            <nav className="flex justify-center" aria-label="Analysis tools">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border-2 border-yellow-300 p-2 flex flex-wrap gap-2 paint-brush-border max-w-full">
-                {tabs.map((tab) => {
-                  const Icon = tab.icon
-                  return (
+            <nav className="flex justify-center px-4" aria-label="Analysis tools">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border-2 border-yellow-300 p-3 paint-brush-border w-full max-w-5xl">
+                {/* Mobile: Custom grid layout for better alignment */}
+                <div className="sm:hidden space-y-2">
+                  {/* First row: Color Palette and Color Picker */}
+                  <div className="grid grid-cols-2 gap-2">
+                    {tabs.slice(0, 2).map((tab) => {
+                      const Icon = tab.icon
+                      return (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`
+                            artist-tab flex items-center justify-center gap-1 px-2 py-3 rounded-lg text-xs font-semibold transition-all duration-300
+                            ${activeTab === tab.id 
+                              ? 'active' 
+                              : ''
+                            }
+                          `}
+                          aria-pressed={activeTab === tab.id}
+                          aria-describedby={`${tab.id}-description`}
+                        >
+                          <Icon className="h-4 w-4" aria-hidden="true" />
+                          <span className="whitespace-nowrap text-center">{tab.name}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  
+                  {/* Second row: Squint Analysis and Value Map */}
+                  <div className="grid grid-cols-2 gap-2">
+                    {tabs.slice(2, 4).map((tab) => {
+                      const Icon = tab.icon
+                      return (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`
+                            artist-tab flex items-center justify-center gap-1 px-2 py-3 rounded-lg text-xs font-semibold transition-all duration-300
+                            ${activeTab === tab.id 
+                              ? 'active' 
+                              : ''
+                            }
+                          `}
+                          aria-pressed={activeTab === tab.id}
+                          aria-describedby={`${tab.id}-description`}
+                        >
+                          <Icon className="h-4 w-4" aria-hidden="true" />
+                          <span className="whitespace-nowrap text-center">{tab.name}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  
+                  {/* Third row: Temperature Map centered */}
+                  <div className="flex justify-center">
                     <button
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={() => setActiveTab('temperature')}
                       className={`
-                        artist-tab flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 flex-shrink-0
-                        ${activeTab === tab.id 
+                        artist-tab flex items-center justify-center gap-1 px-4 py-3 rounded-lg text-xs font-semibold transition-all duration-300 w-48
+                        ${activeTab === 'temperature' 
                           ? 'active' 
                           : ''
                         }
                       `}
-                      aria-pressed={activeTab === tab.id}
-                      aria-describedby={`${tab.id}-description`}
+                      aria-pressed={activeTab === 'temperature'}
+                      aria-describedby="temperature-description"
                     >
-                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-                      <span className="whitespace-nowrap">{tab.name}</span>
+                      <Thermometer className="h-4 w-4" aria-hidden="true" />
+                      <span className="whitespace-nowrap text-center">Temperature Map</span>
                     </button>
-                  )
-                })}
+                  </div>
+                </div>
+                
+                {/* Desktop: Horizontal layout with responsive sizing */}
+                <div className="hidden sm:flex gap-2 justify-center flex-wrap">
+                  {tabs.map((tab) => {
+                    const Icon = tab.icon
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`
+                          artist-tab flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 flex-shrink-0
+                          ${activeTab === tab.id 
+                            ? 'active' 
+                            : ''
+                          }
+                        `}
+                        aria-pressed={activeTab === tab.id}
+                        aria-describedby={`${tab.id}-description`}
+                      >
+                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
+                        <span className="whitespace-nowrap">{tab.name}</span>
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
             </nav>
 

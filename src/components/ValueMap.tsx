@@ -25,19 +25,19 @@ export function ValueMap({ originalImage, valueMap }: ValueMapProps) {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <div>
+      <div className="mb-6">
+        <div className="text-center sm:text-left mb-4">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Value Map</h2>
           <p className="text-gray-600">
             Black and white version showing light and dark relationships
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 justify-center sm:justify-end">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowComparison(!showComparison)}
-            className="flex items-center gap-2"
+            className="flex items-center justify-center gap-2"
           >
             <Contrast className="h-4 w-4" />
             {showComparison ? 'Hide' : 'Show'} Comparison
@@ -46,7 +46,7 @@ export function ValueMap({ originalImage, valueMap }: ValueMapProps) {
             variant="default"
             size="sm"
             onClick={downloadValueMap}
-            className="flex items-center gap-2"
+            className="flex items-center justify-center gap-2"
           >
             <Download className="h-4 w-4" />
             Download
