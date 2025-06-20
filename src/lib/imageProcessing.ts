@@ -307,7 +307,7 @@ export class ImageProcessor {
 
   private createSquintLevels(img: HTMLImageElement): string[] {
     const levels = []
-    const blurRadii = [2, 5, 10, 20]
+    const blurRadii = [16, 32, 48, 64]
     
     for (const radius of blurRadii) {
       const canvas = document.createElement('canvas')

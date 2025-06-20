@@ -153,7 +153,7 @@ export default function Home() {
             
             {/* Tab Navigation */}
             <nav className="flex justify-center" aria-label="Analysis tools">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border-2 border-yellow-300 p-2 flex space-x-2 paint-brush-border">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border-2 border-yellow-300 p-2 flex flex-wrap gap-2 paint-brush-border max-w-full">
                 {tabs.map((tab) => {
                   const Icon = tab.icon
                   return (
@@ -161,7 +161,7 @@ export default function Home() {
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`
-                        artist-tab flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300
+                        artist-tab flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 flex-shrink-0
                         ${activeTab === tab.id 
                           ? 'active' 
                           : ''
@@ -170,8 +170,8 @@ export default function Home() {
                       aria-pressed={activeTab === tab.id}
                       aria-describedby={`${tab.id}-description`}
                     >
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                      {tab.name}
+                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
+                      <span className="whitespace-nowrap">{tab.name}</span>
                     </button>
                   )
                 })}

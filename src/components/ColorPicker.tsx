@@ -127,23 +127,36 @@ export function ColorPicker({ imageUrl, onColorSelect }: ColorPickerProps) {
                 onMouseLeave={handleMouseLeave}
                 style={{ 
                   cursor: 'none',
-                  mixBlendMode: 'multiply',
                   pointerEvents: 'auto'
                 }}
               />
 
-              {/* Crosshair Cursor */}
+              {/* Custom Crosshair Cursor with Center Point */}
               {isHovering && (
                 <div
                   className="absolute pointer-events-none z-10"
                   style={{
-                    left: cursorPosition.x - 12,
-                    top: cursorPosition.y - 12,
+                    left: cursorPosition.x,
+                    top: cursorPosition.y,
                     transform: 'translate(-50%, -50%)'
                   }}
                 >
-                  <Crosshair className="h-6 w-6 text-white drop-shadow-lg" strokeWidth={3} />
-                  <Crosshair className="h-6 w-6 text-black absolute inset-0" strokeWidth={1} />
+                  {/* Crosshair with center point */}
+                  <svg width="24" height="24" viewBox="0 0 24 24" className="drop-shadow-lg">
+                    {/* White outline for visibility */}
+                    <line x1="12" y1="2" x2="12" y2="8" stroke="white" strokeWidth="3" />
+                    <line x1="12" y1="16" x2="12" y2="22" stroke="white" strokeWidth="3" />
+                    <line x1="2" y1="12" x2="8" y2="12" stroke="white" strokeWidth="3" />
+                    <line x1="16" y1="12" x2="22" y2="12" stroke="white" strokeWidth="3" />
+                    <circle cx="12" cy="12" r="2" fill="white" stroke="white" strokeWidth="1" />
+                    
+                    {/* Black crosshair for contrast */}
+                    <line x1="12" y1="2" x2="12" y2="8" stroke="black" strokeWidth="1" />
+                    <line x1="12" y1="16" x2="12" y2="22" stroke="black" strokeWidth="1" />
+                    <line x1="2" y1="12" x2="8" y2="12" stroke="black" strokeWidth="1" />
+                    <line x1="16" y1="12" x2="22" y2="12" stroke="black" strokeWidth="1" />
+                    <circle cx="12" cy="12" r="1.5" fill="black" />
+                  </svg>
                 </div>
               )}
             </div>

@@ -81,9 +81,20 @@ export function ImageUploader({ onImageUpload, isProcessing = false }: ImageUplo
               alt="Preview"
               className="max-w-full max-h-64 mx-auto rounded-lg shadow-md"
             />
-            <p className="text-sm text-gray-600">
-              {isProcessing ? 'Processing image...' : 'Image ready for analysis'}
-            </p>
+            {isProcessing ? (
+              <div className="space-y-3">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-orange-500 border-t-transparent"></div>
+                  <p className="text-sm font-medium text-orange-600">Processing image...</p>
+                </div>
+                <div className="w-full bg-orange-100 rounded-full h-2">
+                  <div className="bg-gradient-to-r from-orange-400 to-red-500 h-2 rounded-full animate-pulse" style={{ width: '100%' }}></div>
+                </div>
+                <p className="text-xs text-gray-500 text-center">Analyzing colors and generating maps</p>
+              </div>
+            ) : (
+              <p className="text-sm text-green-600 font-medium">✅ Image ready for analysis</p>
+            )}
           </div>
         ) : (
           <div className="space-y-4">
