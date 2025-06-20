@@ -374,7 +374,7 @@ export class ImageProcessor {
         }
         
         levels.push(canvas.toDataURL())
-      } catch (error) {
+      } catch {
         // Fallback: Create a simple blur effect by drawing multiple times with opacity
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.globalAlpha = 0.3
