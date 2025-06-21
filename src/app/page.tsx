@@ -9,6 +9,7 @@ import { ValueMap } from '@/components/ValueMap'
 import { TemperatureMap } from '@/components/TemperatureMap'
 import { ColorPicker } from '@/components/ColorPicker'
 import { ImageProcessor, ImageAnalysis } from '@/lib/imageProcessing'
+import { trackEvent } from '@/components/GoogleAnalytics'
 
 export default function Home() {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -20,6 +21,9 @@ export default function Home() {
     setIsProcessing(true)
     
     try {
+      // Track image upload event
+      trackEvent('image_upload', 'user_interaction', 'image_uploaded', Math.round(file.size / 1024))
+      
       // Create preview URL for original image
       const imageUrl = URL.createObjectURL(file)
       setOriginalImage(imageUrl)
@@ -29,10 +33,14 @@ export default function Home() {
       const result = await processor.processImage(file)
       setAnalysis(result)
       
+      // Track successful analysis
+      trackEvent('analysis_complete', 'user_interaction', 'image_processed')
+      
       // Default to palette view
       setActiveTab('palette')
     } catch (error) {
       console.error('Error processing image:', error)
+      trackEvent('analysis_error', 'user_interaction', 'processing_failed')
       alert('Error processing image. Please try again.')
     } finally {
       setIsProcessing(false)
@@ -41,6 +49,9 @@ export default function Home() {
 
   const exportPalette = () => {
     if (!analysis) return
+    
+    // Track palette export event
+    trackEvent('palette_export', 'user_interaction', 'palette_downloaded')
     
     // Create a canvas with the color palette
     const canvas = document.createElement('canvas')
@@ -61,6 +72,12 @@ export default function Home() {
     link.href = canvas.toDataURL()
     link.download = 'color-palette.png'
     link.click()
+  }
+
+  const handleTabChange = (tabId: 'palette' | 'picker' | 'squint' | 'value' | 'temperature') => {
+    // Track tab navigation
+    trackEvent('tab_navigation', 'user_interaction', `${tabId}_tab_selected`)
+    setActiveTab(tabId)
   }
 
   const tabs = [
@@ -163,7 +180,7 @@ export default function Home() {
                       return (
                         <button
                           key={tab.id}
-                          onClick={() => setActiveTab(tab.id)}
+                          onClick={() => handleTabChange(tab.id)}
                           className={`
                             artist-tab flex items-center justify-center gap-1 px-2 py-3 rounded-lg text-xs font-semibold transition-all duration-300
                             ${activeTab === tab.id 
@@ -188,7 +205,7 @@ export default function Home() {
                       return (
                         <button
                           key={tab.id}
-                          onClick={() => setActiveTab(tab.id)}
+                          onClick={() => handleTabChange(tab.id)}
                           className={`
                             artist-tab flex items-center justify-center gap-1 px-2 py-3 rounded-lg text-xs font-semibold transition-all duration-300
                             ${activeTab === tab.id 
@@ -209,7 +226,7 @@ export default function Home() {
                   {/* Third row: Temperature Map centered */}
                   <div className="flex justify-center">
                     <button
-                      onClick={() => setActiveTab('temperature')}
+                      onClick={() => handleTabChange('temperature')}
                       className={`
                         artist-tab flex items-center justify-center gap-1 px-4 py-3 rounded-lg text-xs font-semibold transition-all duration-300 w-48
                         ${activeTab === 'temperature' 
@@ -233,7 +250,7 @@ export default function Home() {
                     return (
                       <button
                         key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
+                        onClick={() => handleTabChange(tab.id)}
                         className={`
                           artist-tab flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 flex-shrink-0
                           ${activeTab === tab.id 
