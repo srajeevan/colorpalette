@@ -41,8 +41,9 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold text-white mb-6">Our Mission</h2>
               <p className="text-gray-300 text-lg leading-relaxed mb-6">
                 I believe every artist deserves access to quality <strong className="text-white">color analysis tools</strong> 
-                without cost. This platform provides <strong className="text-white">color palette generation</strong> 
-                and <strong className="text-white">value mapping</strong> tools that can help with your art, completely free.
+                without barriers. This platform provides <strong className="text-white">color palette generation</strong> 
+                and <strong className="text-white">value mapping</strong> tools that can help with your art. If you find them useful, 
+                consider supporting the project to keep it running.
               </p>
               <p className="text-gray-300 text-lg leading-relaxed">
                 Whether you&apos;re a beginner learning <strong className="text-white">color theory</strong> or an experienced artist 
@@ -54,7 +55,7 @@ export default function AboutPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-white font-semibold">100% Free Forever</span>
+                  <span className="text-white font-semibold">Free to Use</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
@@ -68,6 +69,26 @@ export default function AboutPage() {
                   <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
                   <span className="text-white font-semibold">Built by an Artist</span>
                 </div>
+              </div>
+              
+              {/* Buy Me a Coffee Support */}
+              <div className="mt-6 pt-6 border-t border-gray-700">
+                <p className="text-gray-400 text-sm mb-4">
+                  If these tools help your art, consider supporting their development:
+                </p>
+                <a 
+                  href="https://buymeacoffee.com/srajeevan" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open('https://buymeacoffee.com/srajeevan', '_blank', 'noopener,noreferrer');
+                  }}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-gray-900 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 transform hover:scale-105"
+                >
+                  <span>☕</span>
+                  <span>Buy me a coffee</span>
+                </a>
               </div>
             </div>
           </div>
