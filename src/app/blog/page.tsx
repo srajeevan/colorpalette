@@ -302,27 +302,35 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* Newsletter Signup */}
-        <section className="mt-20 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl p-12 border border-blue-500/20 text-center">
+        {/* Newsletter Signup - Coming Soon */}
+        <section className="mt-20 bg-gradient-to-r from-gray-600/10 to-gray-500/10 rounded-2xl p-12 border border-gray-500/20 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Get Weekly Art Tips</h2>
-          <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-            Join over 10,000 artists receiving weekly <strong className="text-white">color theory tips</strong>, 
+          <p className="text-gray-300 text-lg mb-4 max-w-2xl mx-auto">
+            Weekly <strong className="text-white">color theory tips</strong>, 
             <strong className="text-white"> painting tutorials</strong>, and <strong className="text-white">professional techniques</strong> 
             delivered to your inbox.
           </p>
+          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-6 max-w-md mx-auto">
+            <p className="text-yellow-400 font-semibold text-sm">📧 Newsletter coming soon!</p>
+            <p className="text-gray-400 text-xs mt-1">We're setting up the email system. Check back later!</p>
+          </div>
           <div className="flex justify-center">
-            <div className="bg-gray-800 rounded-xl p-4 border border-gray-600 max-w-md w-full">
+            <div className="bg-gray-800 rounded-xl p-4 border border-gray-600 max-w-md w-full opacity-60">
               <div className="flex gap-2">
                 <input 
                   type="email" 
                   placeholder="Enter your email for art tips" 
-                  className="flex-1 bg-gray-700 text-white px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  disabled
+                  className="flex-1 bg-gray-700 text-gray-500 px-4 py-3 rounded-lg border border-gray-600 cursor-not-allowed"
                 />
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-bold transition-all duration-300">
-                  Subscribe
+                <button 
+                  disabled
+                  className="bg-gray-600 text-gray-400 px-6 py-3 rounded-lg font-bold cursor-not-allowed"
+                >
+                  Coming Soon
                 </button>
               </div>
-              <p className="text-gray-400 text-xs mt-2">Free tutorials • Unsubscribe anytime • No spam</p>
+              <p className="text-gray-500 text-xs mt-2">Newsletter system in development</p>
             </div>
           </div>
         </section>
