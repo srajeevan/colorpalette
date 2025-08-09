@@ -365,30 +365,17 @@ export default function Home() {
           {!analysis ? (
             /* Upload Screen */
             <div className="h-full overflow-auto">
-              {/* Header Section */}
-              <div className="relative bg-gradient-to-br from-gray-800 via-gray-900 to-black border-b border-gray-700">
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 via-yellow-500/5 to-green-500/5"></div>
-                <div className="relative max-w-6xl mx-auto px-8 py-12">
+              {/* Header Section - Compact */}
+              <div className="relative bg-gray-900 border-b border-gray-700">
+                <div className="relative max-w-6xl mx-auto px-8 py-6">
                   <div className="text-center">
-                    <div className="flex justify-center items-center gap-4 mb-6">
-                      <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-orange-500 rounded-full shadow-lg"></div>
-                      <h1 className="text-4xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
-                        🎨 Free Color Palette Generator & Value Map Analyzer for Artists
-                      </h1>
-                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full shadow-lg"></div>
-                    </div>
-                    <p className="text-gray-300 max-w-4xl mx-auto text-lg font-medium">
-                      Professional <strong className="text-white">color palette generator</strong> and <strong className="text-white">value map analyzer</strong> for <strong className="text-white">oil painters</strong>, <strong className="text-white">watercolor artists</strong>, and <strong className="text-white">traditional painters</strong>. 
-                      Extract <em className="text-yellow-400">dominant colors</em>, analyze <em className="text-blue-400">light and shadow values</em>, explore <em className="text-red-400">color temperature relationships</em>, and use our <em className="text-green-400">real-time color picker</em>.
-                      <span className="text-red-400 font-semibold block mt-2"> Free online art reference tool with advanced squint analysis for better paintings.</span>
+                    <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                      🎨 Free Color Palette Generator & Value Map Analyzer for Artists
+                    </h1>
+                    <p className="text-gray-400 max-w-3xl mx-auto text-sm md:text-base">
+                      Professional <strong className="text-gray-300">color palette generator</strong> and <strong className="text-gray-300">value map analyzer</strong> for artists. 
+                      Extract colors, analyze values, explore temperature relationships, and use our real-time color picker.
                     </p>
-                    <div className="flex justify-center gap-2 mt-6">
-                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse delay-100"></div>
-                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse delay-200"></div>
-                      <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse delay-300"></div>
-                      <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse delay-500"></div>
-                    </div>
                   </div>
                 </div>
               </div>
