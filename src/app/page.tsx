@@ -421,60 +421,60 @@ export default function Home() {
               </div>
 
               {/* How to Use Guide */}
-              <div className="max-w-6xl mx-auto px-8 py-16">
-                <div className="bg-gradient-to-br from-gray-800 via-orange-900/20 to-yellow-900/20 rounded-2xl border-2 border-gradient-to-r from-red-500/20 via-yellow-500/20 to-green-500/20 p-10">
-                  <h2 className="text-3xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent mb-8 text-center">
+              <div className="max-w-6xl mx-auto px-8 py-12">
+                <div className="bg-gray-800 rounded-2xl border border-gray-700 p-8">
+                  <h2 className="text-2xl font-bold text-white mb-6 text-center">
                     🎨 How to Use This Professional Artist Color Analysis Tool
                   </h2>
                   
                   <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div className="text-center group">
-                      <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <span className="text-white font-bold text-xl">1</span>
+                      <div className="bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                        <span className="text-white font-bold text-lg">1</span>
                       </div>
-                      <h3 className="font-bold text-white mb-3 text-lg">📸 Upload Reference Image</h3>
-                      <p className="text-gray-300 font-medium text-sm">
-                        Upload your <strong className="text-white">reference photo</strong> or <strong className="text-white">painting study</strong> using drag & drop or file browser. Supports JPEG, PNG, and WebP formats.
+                      <h3 className="font-semibold text-white mb-2 text-base">📸 Upload Reference Image</h3>
+                      <p className="text-gray-400 text-sm">
+                        Upload your <strong className="text-gray-300">reference photo</strong> or <strong className="text-gray-300">painting study</strong> using drag & drop or file browser. Supports JPEG, PNG, and WebP formats.
                       </p>
                     </div>
                     
                     <div className="text-center group">
-                      <div className="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <span className="text-white font-bold text-xl">2</span>
+                      <div className="bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                        <span className="text-white font-bold text-lg">2</span>
                       </div>
-                      <h3 className="font-bold text-white mb-3 text-lg">🎨 Extract Dominant Colors</h3>
-                      <p className="text-gray-300 font-medium text-sm">
-                        Get the 6 most <strong className="text-white">dominant colors</strong> as <strong className="text-white">paint swatches</strong> with hex codes and RGB values for accurate <strong className="text-white">color mixing</strong>.
+                      <h3 className="font-semibold text-white mb-2 text-base">🎨 Extract Dominant Colors</h3>
+                      <p className="text-gray-400 text-sm">
+                        Get the 6 most <strong className="text-gray-300">dominant colors</strong> as <strong className="text-gray-300">paint swatches</strong> with hex codes and RGB values for accurate <strong className="text-gray-300">color mixing</strong>.
                       </p>
                     </div>
                     
                     <div className="text-center group">
-                      <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <span className="text-white font-bold text-xl">3</span>
+                      <div className="bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                        <span className="text-white font-bold text-lg">3</span>
                       </div>
-                      <h3 className="font-bold text-white mb-3 text-lg">👁️ Analyze Light & Shadow</h3>
-                      <p className="text-gray-300 font-medium text-sm">
-                        Study <strong className="text-white">light and shadow patterns</strong> with <strong className="text-white">value maps</strong> and <strong className="text-white">squint analysis</strong> to understand form and depth.
+                      <h3 className="font-semibold text-white mb-2 text-base">👁️ Analyze Light & Shadow</h3>
+                      <p className="text-gray-400 text-sm">
+                        Study <strong className="text-gray-300">light and shadow patterns</strong> with <strong className="text-gray-300">value maps</strong> and <strong className="text-gray-300">squint analysis</strong> to understand form and depth.
                       </p>
                     </div>
                     
                     <div className="text-center group">
-                      <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <span className="text-white font-bold text-xl">4</span>
+                      <div className="bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                        <span className="text-white font-bold text-lg">4</span>
                       </div>
-                      <h3 className="font-bold text-white mb-3 text-lg">🖌️ Paint with Confidence</h3>
-                      <p className="text-gray-300 font-medium text-sm">
-                        Use <strong className="text-white">color temperature analysis</strong> and <strong className="text-white">real-time color picker</strong> to create more accurate and vibrant paintings.
+                      <h3 className="font-semibold text-white mb-2 text-base">🖌️ Paint with Confidence</h3>
+                      <p className="text-gray-400 text-sm">
+                        Use <strong className="text-gray-300">color temperature analysis</strong> and <strong className="text-gray-300">real-time color picker</strong> to create more accurate and vibrant paintings.
                       </p>
                     </div>
                   </div>
                   
-                  <div className="mt-8 text-center">
-                    <p className="text-lg font-semibold text-gray-200">
-                      ✨ Perfect for <span className="text-red-400">Oil Painters</span>, <span className="text-yellow-400">Watercolor Artists</span>, <span className="text-green-400">Acrylic Painters</span>, and <span className="text-blue-400">Traditional Artists</span> ✨
+                  <div className="mt-6 text-center">
+                    <p className="text-base font-medium text-gray-300">
+                      ✨ Perfect for <span className="text-gray-200">Oil Painters</span>, <span className="text-gray-200">Watercolor Artists</span>, <span className="text-gray-200">Acrylic Painters</span>, and <span className="text-gray-200">Traditional Artists</span> ✨
                     </p>
                     <p className="text-sm text-gray-400 mt-2">
-                      <strong className="text-white">Free online tool</strong> • No registration required • Works on desktop and mobile • Export color palettes
+                      <strong className="text-gray-300">Free online tool</strong> • No registration required • Works on desktop and mobile • Export color palettes
                     </p>
                   </div>
                 </div>
@@ -510,30 +510,22 @@ export default function Home() {
                   </div>
                 </div>
                 
-                <div className="mt-8 p-6 bg-gradient-to-br from-amber-900/30 to-orange-900/30 rounded-lg border border-amber-500/20">
-                  <h3 className="font-semibold text-amber-300 mb-3">Why Artists Choose Our Color Analysis Tool</h3>
-                  <p className="text-amber-100/90 text-sm">
-                    Our <strong className="text-white">free color palette generator</strong> uses advanced algorithms to provide accurate color analysis for <strong className="text-white">oil painting</strong>, 
-                    <strong className="text-white"> watercolor</strong>, and <strong className="text-white">acrylic painting</strong>. Whether you&apos;re a beginner learning <strong className="text-white">color theory</strong> or a 
-                    professional artist working on <strong className="text-white">commissioned paintings</strong>, our tool helps you understand <strong className="text-white">color relationships</strong>, 
-                    <strong className="text-white"> value structures</strong>, and <strong className="text-white">temperature variations</strong> in your reference images.
+                <div className="mt-8 p-6 bg-gray-800 rounded-lg border border-gray-700">
+                  <h3 className="font-semibold text-white mb-3">Why Artists Choose Our Color Analysis Tool</h3>
+                  <p className="text-gray-400 text-sm">
+                    Our <strong className="text-gray-300">free color palette generator</strong> uses advanced algorithms to provide accurate color analysis for <strong className="text-gray-300">oil painting</strong>, 
+                    <strong className="text-gray-300"> watercolor</strong>, and <strong className="text-gray-300">acrylic painting</strong>. Whether you&apos;re a beginner learning <strong className="text-gray-300">color theory</strong> or a 
+                    professional artist working on <strong className="text-gray-300">commissioned paintings</strong>, our tool helps you understand <strong className="text-gray-300">color relationships</strong>, 
+                    <strong className="text-gray-300"> value structures</strong>, and <strong className="text-gray-300">temperature variations</strong> in your reference images.
                   </p>
                 </div>
               </div>
 
               {/* Footer */}
-              <div className="relative bg-gradient-to-br from-gray-800 via-gray-900 to-black border-t border-gray-700 mt-12">
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 via-yellow-500/5 to-green-500/5"></div>
-                <div className="relative max-w-6xl mx-auto px-8 py-10">
+              <div className="bg-gray-900 border-t border-gray-700 mt-12">
+                <div className="max-w-6xl mx-auto px-8 py-8">
                   <div className="text-center">
-                    <div className="flex justify-center gap-3 mb-4">
-                      <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                      <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
-                      <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                      <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                      <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
-                    </div>
-                    <p className="text-lg font-semibold bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                    <p className="text-base font-medium text-white">
                       Built with ❤️ for oil painters and traditional artists worldwide
                     </p>
                     <p className="text-gray-300 font-medium mt-2">
