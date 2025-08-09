@@ -78,12 +78,12 @@ export default function BlogPage() {
   ]
 
   const categories = [
-    { name: "Color Theory", count: 12, color: "bg-red-500" },
-    { name: "Oil Painting", count: 18, color: "bg-blue-500" },
-    { name: "Watercolor", count: 14, color: "bg-green-500" },
-    { name: "Value Studies", count: 8, color: "bg-purple-500" },
-    { name: "Portrait Painting", count: 10, color: "bg-orange-500" },
-    { name: "Digital Tools", count: 6, color: "bg-teal-500" }
+    { name: "Color Theory", count: 1, color: "bg-red-500", slug: "/tutorials/color-theory" },
+    { name: "Oil Painting", count: 1, color: "bg-blue-500", slug: "/tutorials/oil-painting" },
+    { name: "Watercolor", count: 1, color: "bg-green-500", slug: "/tutorials/watercolor-mixing" },
+    { name: "Value Studies", count: 1, color: "bg-purple-500", slug: "/tutorials/value-studies" },
+    { name: "Portrait Painting", count: 1, color: "bg-orange-500", slug: "/tutorials/portrait-painting" },
+    { name: "Digital Tools", count: 1, color: "bg-teal-500", slug: "/tutorials/digital-color-tools" }
   ]
 
   return (
@@ -196,11 +196,13 @@ export default function BlogPage() {
           <h2 className="text-2xl font-bold text-white mb-8">Browse by Category</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {categories.map((category, index) => (
-              <div key={index} className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-colors cursor-pointer group">
-                <div className={`w-3 h-3 ${category.color} rounded-full mb-2`}></div>
-                <h3 className="text-white font-semibold text-sm group-hover:text-blue-400 transition-colors">{category.name}</h3>
-                <p className="text-gray-400 text-xs">{category.count} articles</p>
-              </div>
+              <Link key={index} href={category.slug} className="block">
+                <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-colors cursor-pointer group">
+                  <div className={`w-3 h-3 ${category.color} rounded-full mb-2`}></div>
+                  <h3 className="text-white font-semibold text-sm group-hover:text-blue-400 transition-colors">{category.name}</h3>
+                  <p className="text-gray-400 text-xs">{category.count} tutorial</p>
+                </div>
+              </Link>
             ))}
           </div>
         </section>
