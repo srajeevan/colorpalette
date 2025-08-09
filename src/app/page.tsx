@@ -214,15 +214,6 @@ export default function Home() {
               <span>Buy me a coffee</span>
             </a>
             
-            {/* Primary CTA - Premium design */}
-            <a 
-              href="#" 
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-2.5 rounded-xl font-bold text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl ring-2 ring-blue-500/20 hover:ring-blue-500/40"
-            >
-              <span className="text-lg">✨</span>
-              <span>Pro Tips</span>
-            </a>
-            
             {/* Mobile/Tablet menu button - Enhanced */}
             <button className="lg:hidden p-3 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-200 backdrop-blur-sm">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
