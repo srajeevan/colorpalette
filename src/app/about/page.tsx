@@ -80,10 +80,6 @@ export default function AboutPage() {
                   href="https://buymeacoffee.com/srajeevan" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.open('https://buymeacoffee.com/srajeevan', '_blank', 'noopener,noreferrer');
-                  }}
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-gray-900 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 transform hover:scale-105"
                 >
                   <span>☕</span>
