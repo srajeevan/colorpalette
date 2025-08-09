@@ -312,7 +312,7 @@ export default function BlogPage() {
           </p>
           <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-6 max-w-md mx-auto">
             <p className="text-yellow-400 font-semibold text-sm">📧 Newsletter coming soon!</p>
-            <p className="text-gray-400 text-xs mt-1">We're setting up the email system. Check back later!</p>
+            <p className="text-gray-400 text-xs mt-1">We&apos;re setting up the email system. Check back later!</p>
           </div>
           <div className="flex justify-center">
             <div className="bg-gray-800 rounded-xl p-4 border border-gray-600 max-w-md w-full opacity-60">
