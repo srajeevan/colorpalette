@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { Palette, Eye, Contrast, Thermometer, Crosshair } from 'lucide-react'
 import { ImageUploader } from '@/components/ImageUploader'
 import { ColorPalette } from '@/components/ColorPalette'
@@ -8,6 +9,7 @@ import { SquintViewer } from '@/components/SquintViewer'
 import { ValueMap } from '@/components/ValueMap'
 import { TemperatureMap } from '@/components/TemperatureMap'
 import { ColorPicker } from '@/components/ColorPicker'
+import { ColorPickerCanvas } from '@/components/ColorPickerCanvas'
 import { ImageProcessor, ImageAnalysis } from '@/lib/imageProcessing'
 import { trackEvent } from '@/components/GoogleAnalytics'
 
@@ -16,6 +18,9 @@ export default function Home() {
   const [originalImage, setOriginalImage] = useState<string>('')
   const [analysis, setAnalysis] = useState<ImageAnalysis | null>(null)
   const [activeTab, setActiveTab] = useState<'palette' | 'picker' | 'squint' | 'value' | 'temperature'>('palette')
+  const [squintLevel, setSquintLevel] = useState(0)
+  const [selectedColor, setSelectedColor] = useState<{hex: string; rgb: {r: number; g: number; b: number}} | null>(null)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   const handleImageUpload = async (file: File) => {
     setIsProcessing(true)
@@ -89,7 +94,7 @@ export default function Home() {
   ]
 
   return (
-    <div className="min-h-screen palette-effect">
+    <div className="min-h-screen bg-gray-900 flex flex-col w-screen overflow-x-hidden">
       {/* SEO Structured Data */}
       <script
         type="application/ld+json"
@@ -123,332 +128,546 @@ export default function Home() {
         }}
       />
 
-      {/* Header */}
-      <header className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 via-yellow-500/10 to-green-500/10"></div>
-        <div className="relative bg-white/90 backdrop-blur-sm shadow-lg border-b-4 border-gradient-to-r from-red-500 via-yellow-500 to-green-500">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="text-center">
-              <div className="flex justify-center items-center gap-4 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-orange-500 rounded-full shadow-lg" aria-hidden="true"></div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
-                  🎨 Free Color Palette Generator & Value Map Analyzer for Artists
-                </h1>
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full shadow-lg" aria-hidden="true"></div>
-              </div>
-              <p className="text-gray-700 max-w-3xl mx-auto text-lg font-medium">
-                Professional <strong>color palette generator</strong> and <strong>value map analyzer</strong> for <strong>oil painters</strong>, <strong>watercolor artists</strong>, and <strong>traditional painters</strong>. 
-                Extract <em>dominant colors</em>, analyze <em>light and shadow values</em>, explore <em>color temperature relationships</em>, and use our <em>real-time color picker</em>.
-                <span className="text-red-600 font-semibold"> Free online art reference tool with advanced squint analysis for better paintings.</span>
-              </p>
-              <div className="flex justify-center gap-2 mt-4" aria-hidden="true">
-                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse delay-100"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse delay-200"></div>
-                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse delay-300"></div>
-                <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse delay-500"></div>
-              </div>
+      {/* Top Navbar - Modern UI/UX Design */}
+      <nav className="bg-gray-900/95 backdrop-blur-sm border-b border-gray-700/50 px-8 py-4 flex-shrink-0 z-20 shadow-lg">
+        <div className="max-w-8xl mx-auto flex items-center justify-between">
+          {/* Left - Icon + Brand (Following F-pattern design) */}
+          <div className="flex items-center gap-4">
+            {/* Logo Icon - Positioned leftmost for visual hierarchy */}
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg ring-2 ring-blue-500/20 transition-all duration-200 hover:ring-blue-500/40 hover:scale-105">
+              <span className="text-white font-bold text-lg">🎨</span>
+            </div>
+            
+            {/* Brand Text - Improved typography hierarchy */}
+            <div className="hidden sm:block">
+              <h1 className="text-white font-bold text-xl tracking-tight leading-tight">Artist Color Tools</h1>
+              <p className="text-gray-400 text-sm font-medium">Professional Color Analysis Platform</p>
             </div>
           </div>
-        </div>
-      </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Image Upload Section */}
-        <section className="mb-8" aria-labelledby="upload-heading">
-          <h2 id="upload-heading" className="sr-only">Upload Your Reference Image</h2>
-          <ImageUploader 
-            onImageUpload={handleImageUpload}
-            isProcessing={isProcessing}
-          />
-        </section>
-
-        {/* Analysis Results */}
-        {analysis && originalImage && (
-          <section className="space-y-8" aria-labelledby="analysis-heading">
-            <h2 id="analysis-heading" className="sr-only">Color Analysis Results</h2>
+          {/* Center - Navigation Links (Improved spacing and typography) */}
+          <div className="hidden lg:flex items-center gap-10">
+            <Link href="/" className="text-gray-300 hover:text-white text-base font-semibold transition-all duration-300 hover:scale-105 relative group">
+              Home
+              <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
             
-            {/* Tab Navigation */}
-            <nav className="flex justify-center px-4" aria-label="Analysis tools">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border-2 border-yellow-300 p-3 paint-brush-border w-full max-w-5xl">
-                {/* Mobile: Custom grid layout for better alignment */}
-                <div className="sm:hidden space-y-2">
-                  {/* First row: Color Palette and Color Picker */}
-                  <div className="grid grid-cols-2 gap-2">
-                    {tabs.slice(0, 2).map((tab) => {
-                      const Icon = tab.icon
-                      return (
-                        <button
-                          key={tab.id}
-                          onClick={() => handleTabChange(tab.id)}
-                          className={`
-                            artist-tab flex items-center justify-center gap-1 px-2 py-3 rounded-lg text-xs font-semibold transition-all duration-300
-                            ${activeTab === tab.id 
-                              ? 'active' 
-                              : ''
-                            }
-                          `}
-                          aria-pressed={activeTab === tab.id}
-                          aria-describedby={`${tab.id}-description`}
-                        >
-                          <Icon className="h-4 w-4" aria-hidden="true" />
-                          <span className="whitespace-nowrap text-center">{tab.name}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
-                  
-                  {/* Second row: Squint Analysis and Value Map */}
-                  <div className="grid grid-cols-2 gap-2">
-                    {tabs.slice(2, 4).map((tab) => {
-                      const Icon = tab.icon
-                      return (
-                        <button
-                          key={tab.id}
-                          onClick={() => handleTabChange(tab.id)}
-                          className={`
-                            artist-tab flex items-center justify-center gap-1 px-2 py-3 rounded-lg text-xs font-semibold transition-all duration-300
-                            ${activeTab === tab.id 
-                              ? 'active' 
-                              : ''
-                            }
-                          `}
-                          aria-pressed={activeTab === tab.id}
-                          aria-describedby={`${tab.id}-description`}
-                        >
-                          <Icon className="h-4 w-4" aria-hidden="true" />
-                          <span className="whitespace-nowrap text-center">{tab.name}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
-                  
-                  {/* Third row: Temperature Map centered */}
-                  <div className="flex justify-center">
-                    <button
-                      onClick={() => handleTabChange('temperature')}
-                      className={`
-                        artist-tab flex items-center justify-center gap-1 px-4 py-3 rounded-lg text-xs font-semibold transition-all duration-300 w-48
-                        ${activeTab === 'temperature' 
-                          ? 'active' 
-                          : ''
+            <div className="relative group">
+              <button className="text-gray-300 hover:text-white text-base font-semibold transition-all duration-300 hover:scale-105 flex items-center gap-2">
+                Tutorials
+                <svg className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {/* Enhanced Dropdown with modern design */}
+              <div className="absolute top-full left-0 mt-3 w-56 bg-gray-800/95 backdrop-blur-sm rounded-xl border border-gray-600/50 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                <div className="p-3">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3">Learn & Grow</div>
+                  <Link href="/tutorials/color-theory" className="block px-4 py-3 text-base text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200 group/item">
+                    <div className="flex items-center gap-3">
+                      <span className="text-blue-400">📚</span>
+                      <span>Color Theory Basics</span>
+                    </div>
+                  </Link>
+                  <Link href="/tutorials/oil-painting" className="block px-4 py-3 text-base text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200 group/item">
+                    <div className="flex items-center gap-3">
+                      <span className="text-green-400">🎨</span>
+                      <span>Oil Painting Tips</span>
+                    </div>
+                  </Link>
+                  <Link href="/tutorials/value-studies" className="block px-4 py-3 text-base text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200 group/item">
+                    <div className="flex items-center gap-3">
+                      <span className="text-purple-400">⚫</span>
+                      <span>Value Studies Guide</span>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+            
+            <Link href="/about" className="text-gray-300 hover:text-white text-base font-semibold transition-all duration-300 hover:scale-105 relative group">
+              About
+              <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            
+            <Link href="/blog" className="text-gray-300 hover:text-white text-base font-semibold transition-all duration-300 hover:scale-105 relative group">
+              Blog
+              <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+          </div>
+
+          {/* Right - CTA Section (Enhanced with better spacing) */}
+          <div className="flex items-center gap-6">
+            {/* Support CTA - Refined design */}
+            <a 
+              href="https://buymeacoffee.com/srajeevan" 
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open('https://buymeacoffee.com/srajeevan', '_blank', 'noopener,noreferrer');
+              }}
+              className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-gray-900 px-5 py-2.5 rounded-xl font-bold text-base transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            >
+              <span className="text-lg">☕</span>
+              <span>Buy me a coffee</span>
+            </a>
+            
+            {/* Mobile/Tablet menu button - Enhanced */}
+            <button className="lg:hidden p-3 text-gray-400 hover:text-white hover:bg-gray-800/50 rounded-xl transition-all duration-200 backdrop-blur-sm">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content Area with Sidebar */}
+      <div className="flex-1 flex min-h-0">
+        {/* Left Sidebar Navigation */}
+      <div className={`${sidebarCollapsed ? 'w-16' : 'w-64'} bg-gray-800 border-r border-gray-700 flex flex-col transition-all duration-300`}>
+        {/* Sidebar Header with Collapse Button */}
+        <div className={`${sidebarCollapsed ? 'p-3' : 'p-6'} border-b border-gray-700 relative`}>
+          <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'}`}>
+            {!sidebarCollapsed && (
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xs">🎨</span>
+                </div>
+                <div>
+                  <h2 className="text-white font-semibold text-sm">Tools</h2>
+                  <p className="text-gray-400 text-xs">Analysis Panel</p>
+                </div>
+              </div>
+            )}
+            
+            {/* Collapse Toggle Button */}
+            <button
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className={`p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-all duration-200 flex-shrink-0 ${
+                sidebarCollapsed ? 'w-8 h-8' : ''
+              }`}
+              title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {sidebarCollapsed ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation Items */}
+        <div className="flex-1 p-4">
+          <nav className="space-y-2">
+            {/* Upload Button */}
+            <div className="mb-6">
+              <button
+                onClick={() => {
+                  const input = document.querySelector('input[type="file"]') as HTMLInputElement
+                  if (input) input.click()
+                }}
+                className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-all duration-200 group`}
+                title={sidebarCollapsed ? 'Upload Image' : ''}
+              >
+                <div className="w-5 h-5 text-gray-400 group-hover:text-white">📁</div>
+                {!sidebarCollapsed && <span className="font-medium">Upload Image</span>}
+              </button>
+            </div>
+
+            {/* Analysis Tools - Always visible */}
+            <div className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 ${sidebarCollapsed ? 'text-center' : 'px-4'}`}>
+              {sidebarCollapsed ? '•••' : 'Analysis Tools'}
+            </div>
+            {tabs.map((tab) => {
+              const Icon = tab.icon
+              const isDisabled = !analysis
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => analysis && handleTabChange(tab.id)}
+                  disabled={isDisabled}
+                  className={`
+                    w-full flex items-center ${sidebarCollapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 rounded-lg text-left font-medium transition-all duration-200 group
+                    ${isDisabled 
+                      ? 'text-gray-500 cursor-not-allowed opacity-50' 
+                      : activeTab === tab.id && analysis
+                        ? 'bg-blue-600 text-white shadow-lg' 
+                        : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                    }
+                  `}
+                  title={sidebarCollapsed ? (isDisabled ? `${tab.name} (Upload image first)` : tab.name) : ''}
+                >
+                  <Icon className="h-5 w-5 flex-shrink-0" />
+                  {!sidebarCollapsed && (
+                    <div className="flex-1">
+                      <div className="font-medium">{tab.name}</div>
+                      <div className="text-xs opacity-75 mt-0.5">
+                        {isDisabled 
+                          ? 'Upload image first' 
+                          : activeTab === tab.id && analysis 
+                            ? 'Active' 
+                            : 'Click to activate'
                         }
-                      `}
-                      aria-pressed={activeTab === 'temperature'}
-                      aria-describedby="temperature-description"
-                    >
-                      <Thermometer className="h-4 w-4" aria-hidden="true" />
-                      <span className="whitespace-nowrap text-center">Temperature Map</span>
-                    </button>
-                  </div>
-                </div>
-                
-                {/* Desktop: Horizontal layout with responsive sizing */}
-                <div className="hidden sm:flex gap-2 justify-center flex-wrap">
-                  {tabs.map((tab) => {
-                    const Icon = tab.icon
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => handleTabChange(tab.id)}
-                        className={`
-                          artist-tab flex items-center gap-1 sm:gap-2 px-3 sm:px-4 lg:px-6 py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 flex-shrink-0
-                          ${activeTab === tab.id 
-                            ? 'active' 
-                            : ''
-                          }
-                        `}
-                        aria-pressed={activeTab === tab.id}
-                        aria-describedby={`${tab.id}-description`}
-                      >
-                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-                        <span className="whitespace-nowrap">{tab.name}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            </nav>
+                      </div>
+                    </div>
+                  )}
+                </button>
+              )
+            })}
+          </nav>
 
-            {/* Tab Content */}
-            <div className="min-h-[400px]">
-              {activeTab === 'palette' && (
-                <section aria-labelledby="palette-heading">
-                  <ColorPalette 
-                    colors={analysis.dominantColors}
-                    onExport={exportPalette}
-                  />
-                </section>
-              )}
-              
-              {activeTab === 'picker' && (
-                <section aria-labelledby="picker-heading">
-                  <ColorPicker 
-                    imageUrl={originalImage}
-                  />
-                </section>
-              )}
-              
-              {activeTab === 'squint' && (
-                <section aria-labelledby="squint-heading">
-                  <SquintViewer 
-                    originalImage={originalImage}
-                    squintLevels={analysis.squintLevels}
-                  />
-                </section>
-              )}
-              
-              {activeTab === 'value' && (
-                <section aria-labelledby="value-heading">
-                  <ValueMap 
-                    originalImage={originalImage}
-                    valueMap={analysis.valueMap}
-                  />
-                </section>
-              )}
-              
-              {activeTab === 'temperature' && (
-                <section aria-labelledby="temperature-heading">
-                  <TemperatureMap 
-                    originalImage={originalImage}
-                    temperatureMap={analysis.temperatureMap}
-                  />
-                </section>
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* Getting Started Guide */}
-        {!analysis && !isProcessing && (
-          <section className="mt-12 max-w-5xl mx-auto" aria-labelledby="guide-heading">
-            <div className="bg-gradient-to-br from-white via-orange-50 to-yellow-50 rounded-2xl shadow-xl border-4 border-gradient-to-r from-red-300 via-yellow-300 to-green-300 p-10 paint-brush-border">
-              <h2 id="guide-heading" className="text-3xl font-bold bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 bg-clip-text text-transparent mb-8 text-center">
-                🎨 How to Use This Professional Artist Color Analysis Tool
-              </h2>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <article className="text-center group">
-                  <div className="bg-gradient-to-br from-red-400 to-red-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
-                    <span className="text-white font-bold text-xl">1</span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-3 text-lg">📸 Upload Reference Image</h3>
-                  <p className="text-gray-700 font-medium">
-                    Upload your <strong>reference photo</strong> or <strong>painting study</strong> using drag & drop or file browser. Supports JPEG, PNG, and WebP formats.
-                  </p>
-                </article>
-                
-                <article className="text-center group">
-                  <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
-                    <span className="text-white font-bold text-xl">2</span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-3 text-lg">🎨 Extract Dominant Colors</h3>
-                  <p className="text-gray-700 font-medium">
-                    Get the 6 most <strong>dominant colors</strong> as <strong>paint swatches</strong> with hex codes and RGB values for accurate <strong>color mixing</strong>.
-                  </p>
-                </article>
-                
-                <article className="text-center group">
-                  <div className="bg-gradient-to-br from-green-400 to-green-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
-                    <span className="text-white font-bold text-xl">3</span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-3 text-lg">👁️ Analyze Light & Shadow</h3>
-                  <p className="text-gray-700 font-medium">
-                    Study <strong>light and shadow patterns</strong> with <strong>value maps</strong> and <strong>squint analysis</strong> to understand form and depth.
-                  </p>
-                </article>
-                
-                <article className="text-center group">
-                  <div className="bg-gradient-to-br from-blue-400 to-purple-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
-                    <span className="text-white font-bold text-xl">4</span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-3 text-lg">🖌️ Paint with Confidence</h3>
-                  <p className="text-gray-700 font-medium">
-                    Use <strong>color temperature analysis</strong> and <strong>real-time color picker</strong> to create more accurate and vibrant paintings.
-                  </p>
-                </article>
-              </div>
-              
-              <div className="mt-8 text-center">
-                <p className="text-lg font-semibold text-gray-800">
-                  ✨ Perfect for <span className="text-red-600">Oil Painters</span>, <span className="text-yellow-600">Watercolor Artists</span>, <span className="text-green-600">Acrylic Painters</span>, and <span className="text-blue-600">Traditional Artists</span> ✨
-                </p>
-                <p className="text-sm text-gray-600 mt-2">
-                  <strong>Free online tool</strong> • No registration required • Works on desktop and mobile • Export color palettes
-                </p>
+          {/* Quick Actions at bottom */}
+          {analysis && !sidebarCollapsed && (
+            <div className="mt-8 pt-4 border-t border-gray-700">
+              <div className="space-y-2">
+                <button
+                  onClick={exportPalette}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-all duration-200"
+                >
+                  <span className="text-green-400">📥</span>
+                  <span className="text-sm font-medium">Export Palette</span>
+                </button>
               </div>
             </div>
-          </section>
-        )}
-
-        {/* SEO Content Section */}
-        <section className="mt-16 max-w-4xl mx-auto prose prose-lg" aria-labelledby="seo-content-heading">
-          <h2 id="seo-content-heading" className="text-2xl font-bold text-gray-900 mb-6">
-            Professional Color Analysis Tools for Artists
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-8 text-sm text-gray-700">
-            <article>
-              <h3 className="font-semibold text-gray-900 mb-3">Color Palette Generator Features</h3>
-              <ul className="space-y-2">
-                <li>• <strong>K-means clustering algorithm</strong> for accurate color extraction</li>
-                <li>• <strong>6 dominant colors</strong> with percentage dominance</li>
-                <li>• <strong>Hex codes and RGB values</strong> for precise color matching</li>
-                <li>• <strong>Export color swatches</strong> as PNG images</li>
-                <li>• <strong>Copy color codes</strong> to clipboard instantly</li>
-              </ul>
-            </article>
-            
-            <article>
-              <h3 className="font-semibold text-gray-900 mb-3">Value Map & Analysis Tools</h3>
-              <ul className="space-y-2">
-                <li>• <strong>Grayscale value mapping</strong> for light/shadow study</li>
-                <li>• <strong>4-level squint analysis</strong> for form simplification</li>
-                <li>• <strong>Color temperature mapping</strong> (warm/cool zones)</li>
-                <li>• <strong>Real-time color picker</strong> with crosshair precision</li>
-                <li>• <strong>Side-by-side comparisons</strong> for better analysis</li>
-              </ul>
-            </article>
-          </div>
-          
-          <div className="mt-8 p-6 bg-amber-50 rounded-lg border border-amber-200">
-            <h3 className="font-semibold text-amber-900 mb-3">Why Artists Choose Our Color Analysis Tool</h3>
-            <p className="text-amber-800">
-              Our <strong>free color palette generator</strong> uses advanced algorithms to provide accurate color analysis for <strong>oil painting</strong>, 
-              <strong>watercolor</strong>, and <strong>acrylic painting</strong>. Whether you&apos;re a beginner learning <strong>color theory</strong> or a 
-              professional artist working on <strong>commissioned paintings</strong>, our tool helps you understand <strong>color relationships</strong>, 
-              <strong>value structures</strong>, and <strong>temperature variations</strong> in your reference images.
-            </p>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="relative overflow-hidden mt-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 via-yellow-500/10 to-green-500/10"></div>
-        <div className="relative bg-white/90 backdrop-blur-sm border-t-4 border-gradient-to-r from-red-500 via-yellow-500 to-green-500">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div className="text-center">
-              <div className="flex justify-center gap-3 mb-4" aria-hidden="true">
-                <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
-                <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
-              </div>
-              <p className="text-lg font-semibold bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
-                Built with ❤️ for oil painters and traditional artists worldwide
-              </p>
-              <p className="text-gray-700 font-medium mt-2">
-                Free color analysis tools • Value mapping • Temperature analysis • Real-time color picker
-              </p>
-              <div className="mt-4 text-sm text-gray-600">
-                <span className="font-semibold">🎨 Paint • 👁️ Analyze • 🌡️ Explore • 🎯 Create • 📱 Mobile-Friendly</span>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
-      </footer>
+
+        {/* Bottom Info */}
+        {!sidebarCollapsed && (
+          <div className="p-4 border-t border-gray-700">
+            <div className="text-xs text-gray-400">
+              <div className="font-semibold text-gray-300 mb-1">Free Artist Tool</div>
+              <div>Professional color analysis for painters</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-h-0">
+        {/* Main Content */}
+        <main className="flex-1 bg-gray-900 overflow-hidden min-h-0">
+          {!analysis ? (
+            /* Upload Screen */
+            <div className="h-full overflow-auto">
+              {/* Header Section - Compact */}
+              <div className="relative bg-gray-900 border-b border-gray-700">
+                <div className="relative max-w-6xl mx-auto px-8 py-6">
+                  <div className="text-center">
+                    <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                      🎨 Free Color Palette Generator & Value Map Analyzer for Artists
+                    </h1>
+                    <p className="text-gray-400 max-w-3xl mx-auto text-sm md:text-base">
+                      Professional <strong className="text-gray-300">color palette generator</strong> and <strong className="text-gray-300">value map analyzer</strong> for artists. 
+                      Extract colors, analyze values, explore temperature relationships, and use our real-time color picker.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Upload Section */}
+              <div className="flex items-center justify-center p-8 min-h-[50vh]">
+                <div className="max-w-2xl w-full">
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl font-bold text-white mb-4">
+                      Upload Your Reference Image
+                    </h2>
+                    <p className="text-gray-400">
+                      Get started by uploading your reference photo or painting study
+                    </p>
+                  </div>
+                  
+                  <ImageUploader 
+                    onImageUpload={handleImageUpload}
+                    isProcessing={isProcessing}
+                  />
+
+                  {/* Quick Features */}
+                  <div className="grid md:grid-cols-2 gap-6 mt-12">
+                    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                      <h3 className="text-white font-semibold mb-3">🎨 Color Analysis</h3>
+                      <ul className="text-gray-400 text-sm space-y-2">
+                        <li>• Extract dominant colors with hex codes</li>
+                        <li>• Real-time color picker tool</li>
+                        <li>• Export color palettes</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                      <h3 className="text-white font-semibold mb-3">👁️ Value Studies</h3>
+                      <ul className="text-gray-400 text-sm space-y-2">
+                        <li>• Grayscale value mapping</li>
+                        <li>• 4-level squint analysis</li>
+                        <li>• Temperature mapping (warm/cool)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* How to Use Guide */}
+              <div className="max-w-6xl mx-auto px-8 py-12">
+                <div className="bg-gray-800 rounded-2xl border border-gray-700 p-8">
+                  <h2 className="text-2xl font-bold text-white mb-6 text-center">
+                    🎨 How to Use This Professional Artist Color Analysis Tool
+                  </h2>
+                  
+                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="text-center group">
+                      <div className="bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                        <span className="text-white font-bold text-lg">1</span>
+                      </div>
+                      <h3 className="font-semibold text-white mb-2 text-base">📸 Upload Reference Image</h3>
+                      <p className="text-gray-400 text-sm">
+                        Upload your <strong className="text-gray-300">reference photo</strong> or <strong className="text-gray-300">painting study</strong> using drag & drop or file browser. Supports JPEG, PNG, and WebP formats.
+                      </p>
+                    </div>
+                    
+                    <div className="text-center group">
+                      <div className="bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                        <span className="text-white font-bold text-lg">2</span>
+                      </div>
+                      <h3 className="font-semibold text-white mb-2 text-base">🎨 Extract Dominant Colors</h3>
+                      <p className="text-gray-400 text-sm">
+                        Get the 6 most <strong className="text-gray-300">dominant colors</strong> as <strong className="text-gray-300">paint swatches</strong> with hex codes and RGB values for accurate <strong className="text-gray-300">color mixing</strong>.
+                      </p>
+                    </div>
+                    
+                    <div className="text-center group">
+                      <div className="bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                        <span className="text-white font-bold text-lg">3</span>
+                      </div>
+                      <h3 className="font-semibold text-white mb-2 text-base">👁️ Analyze Light & Shadow</h3>
+                      <p className="text-gray-400 text-sm">
+                        Study <strong className="text-gray-300">light and shadow patterns</strong> with <strong className="text-gray-300">value maps</strong> and <strong className="text-gray-300">squint analysis</strong> to understand form and depth.
+                      </p>
+                    </div>
+                    
+                    <div className="text-center group">
+                      <div className="bg-gray-700 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                        <span className="text-white font-bold text-lg">4</span>
+                      </div>
+                      <h3 className="font-semibold text-white mb-2 text-base">🖌️ Paint with Confidence</h3>
+                      <p className="text-gray-400 text-sm">
+                        Use <strong className="text-gray-300">color temperature analysis</strong> and <strong className="text-gray-300">real-time color picker</strong> to create more accurate and vibrant paintings.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 text-center">
+                    <p className="text-base font-medium text-gray-300">
+                      ✨ Perfect for <span className="text-gray-200">Oil Painters</span>, <span className="text-gray-200">Watercolor Artists</span>, <span className="text-gray-200">Acrylic Painters</span>, and <span className="text-gray-200">Traditional Artists</span> ✨
+                    </p>
+                    <p className="text-sm text-gray-400 mt-2">
+                      <strong className="text-gray-300">Free online tool</strong> • No registration required • Works on desktop and mobile • Export color palettes
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SEO Content Section */}
+              <div className="max-w-5xl mx-auto px-8 py-12 border-t border-gray-800">
+                <h2 className="text-2xl font-bold text-white mb-6 text-center">
+                  Professional Color Analysis Tools for Artists
+                </h2>
+                
+                <div className="grid md:grid-cols-2 gap-8 text-sm">
+                  <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <h3 className="font-semibold text-white mb-3">Color Palette Generator Features</h3>
+                    <ul className="text-gray-300 space-y-2">
+                      <li>• <strong className="text-white">K-means clustering algorithm</strong> for accurate color extraction</li>
+                      <li>• <strong className="text-white">6 dominant colors</strong> with percentage dominance</li>
+                      <li>• <strong className="text-white">Hex codes and RGB values</strong> for precise color matching</li>
+                      <li>• <strong className="text-white">Export color swatches</strong> as PNG images</li>
+                      <li>• <strong className="text-white">Copy color codes</strong> to clipboard instantly</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <h3 className="font-semibold text-white mb-3">Value Map & Analysis Tools</h3>
+                    <ul className="text-gray-300 space-y-2">
+                      <li>• <strong className="text-white">Grayscale value mapping</strong> for light/shadow study</li>
+                      <li>• <strong className="text-white">4-level squint analysis</strong> for form simplification</li>
+                      <li>• <strong className="text-white">Color temperature mapping</strong> (warm/cool zones)</li>
+                      <li>• <strong className="text-white">Real-time color picker</strong> with crosshair precision</li>
+                      <li>• <strong className="text-white">Side-by-side comparisons</strong> for better analysis</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div className="mt-8 p-6 bg-gray-800 rounded-lg border border-gray-700">
+                  <h3 className="font-semibold text-white mb-3">Why Artists Choose Our Color Analysis Tool</h3>
+                  <p className="text-gray-400 text-sm">
+                    Our <strong className="text-gray-300">free color palette generator</strong> uses advanced algorithms to provide accurate color analysis for <strong className="text-gray-300">oil painting</strong>, 
+                    <strong className="text-gray-300"> watercolor</strong>, and <strong className="text-gray-300">acrylic painting</strong>. Whether you&apos;re a beginner learning <strong className="text-gray-300">color theory</strong> or a 
+                    professional artist working on <strong className="text-gray-300">commissioned paintings</strong>, our tool helps you understand <strong className="text-gray-300">color relationships</strong>, 
+                    <strong className="text-gray-300"> value structures</strong>, and <strong className="text-gray-300">temperature variations</strong> in your reference images.
+                  </p>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="bg-gray-900 border-t border-gray-700 mt-12">
+                <div className="max-w-6xl mx-auto px-8 py-8">
+                  <div className="text-center">
+                    <p className="text-base font-medium text-white">
+                      Built with ❤️ for oil painters and traditional artists worldwide
+                    </p>
+                    <p className="text-gray-300 font-medium mt-2">
+                      Free color analysis tools • Value mapping • Temperature analysis • Real-time color picker
+                    </p>
+                    <div className="mt-4 text-sm text-gray-400">
+                      <span className="font-semibold">🎨 Paint • 👁️ Analyze • 🌡️ Explore • 🎯 Create • 📱 Mobile-Friendly</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Analysis Dashboard */
+            <div className="h-full flex flex-col min-h-0">
+              {/* Main Content Grid - Use conservative breakpoint for side-by-side layout */}
+              <div className="flex-1 flex flex-col xl:flex-row gap-0 min-h-0">
+                {/* Left - Image Display Area */}
+                <div className="flex-1 xl:flex-[3] p-2 lg:p-3 min-w-0 min-h-0 w-full h-full">
+                  <div className="bg-gray-800 rounded-xl border border-gray-700 p-2 lg:p-3 h-full w-full flex flex-col min-h-0">
+                    <div className="flex items-center justify-between mb-1 flex-shrink-0">
+                      <h2 className="text-white font-semibold text-sm lg:text-base truncate">
+                        {activeTab === 'palette' && '🎨 Original Image'}
+                        {activeTab === 'picker' && '🎯 Color Picker'}
+                        {activeTab === 'squint' && `👁️ Squint Level ${squintLevel}`}
+                        {activeTab === 'value' && '🔳 Value Map'}
+                        {activeTab === 'temperature' && '🌡️ Temperature Map'}
+                      </h2>
+                      
+                      {activeTab === 'picker' && (
+                        <div className="text-xs text-gray-400 bg-gray-700 px-2 py-1 rounded-full whitespace-nowrap">
+                          Click to pick
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Image Container - Full available space utilization */}
+                    <div className="flex-1 bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center min-h-0 w-full h-full">
+                      {activeTab === 'picker' ? (
+                        <div className="relative w-full h-full flex items-center justify-center">
+                          <img
+                            src={originalImage}
+                            alt="Reference Image for Color Picking"
+                            className="object-contain"
+                            style={{ maxWidth: '95%', maxHeight: '95%' }}
+                          />
+                          <ColorPickerCanvas
+                            imageUrl={originalImage}
+                            isActive={activeTab === 'picker'}
+                            onColorSelect={setSelectedColor}
+                          />
+                        </div>
+                      ) : activeTab === 'squint' ? (
+                        <img
+                          src={squintLevel === 0 ? originalImage : analysis.squintLevels[squintLevel - 1]}
+                          alt="Squint Analysis"
+                          className="object-contain"
+                          style={{ maxWidth: '95%', maxHeight: '95%' }}
+                        />
+                      ) : activeTab === 'value' ? (
+                        <img
+                          src={analysis.valueMap}
+                          alt="Value Map"
+                          className="object-contain"
+                          style={{ maxWidth: '95%', maxHeight: '95%' }}
+                        />
+                      ) : activeTab === 'temperature' ? (
+                        <img
+                          src={analysis.temperatureMap}
+                          alt="Temperature Map"
+                          className="object-contain"
+                          style={{ maxWidth: '95%', maxHeight: '95%' }}
+                        />
+                      ) : (
+                        <img
+                          src={originalImage}
+                          alt="Reference Image"
+                          className="object-contain"
+                          style={{ maxWidth: '95%', maxHeight: '95%' }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Sidebar - Analysis Results */}
+                <div className="xl:w-80 xl:flex-shrink-0 bg-gray-800 border-t xl:border-t-0 xl:border-l border-gray-700 flex flex-col min-h-0 max-h-[50vh] xl:max-h-none">
+                  <div className="p-3 lg:p-4 border-b border-gray-700 flex-shrink-0">
+                    <h3 className="text-white font-semibold text-sm lg:text-base flex items-center gap-2">
+                      📊 Results
+                    </h3>
+                    <p className="text-gray-400 text-xs mt-1 truncate">
+                      {tabs.find(tab => tab.id === activeTab)?.name} analysis
+                    </p>
+                  </div>
+                  
+                  <div className="flex-1 p-3 lg:p-4 overflow-y-auto min-h-0">
+                    {activeTab === 'palette' && (
+                      <ColorPalette 
+                        colors={analysis.dominantColors}
+                        onExport={exportPalette}
+                      />
+                    )}
+                    
+                    {activeTab === 'squint' && (
+                      <SquintViewer 
+                        squintLevels={analysis.squintLevels}
+                        currentLevel={squintLevel}
+                        onLevelChange={setSquintLevel}
+                      />
+                    )}
+                    
+                    {activeTab === 'value' && (
+                      <ValueMap 
+                        valueMap={analysis.valueMap}
+                      />
+                    )}
+                    
+                    {activeTab === 'temperature' && (
+                      <TemperatureMap 
+                        temperatureMap={analysis.temperatureMap}
+                      />
+                    )}
+                    
+                    {activeTab === 'picker' && (
+                      <ColorPicker 
+                        imageUrl={originalImage}
+                        selectedColor={selectedColor}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Hidden file input for new image uploads */}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (file) {
+                handleImageUpload(file)
+              }
+            }}
+            className="hidden"
+          />
+        </main>
+      </div>
+      </div>
     </div>
   )
 }

@@ -5,11 +5,10 @@ import { Contrast, Download } from 'lucide-react'
 import { Button } from './ui/button'
 
 interface ValueMapProps {
-  originalImage: string
   valueMap: string
 }
 
-export function ValueMap({ originalImage, valueMap }: ValueMapProps) {
+export function ValueMap({ valueMap }: ValueMapProps) {
   const [showComparison, setShowComparison] = useState(false)
 
   const downloadValueMap = () => {
@@ -24,92 +23,80 @@ export function ValueMap({ originalImage, valueMap }: ValueMapProps) {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <div className="mb-6">
-        <div className="text-center sm:text-left mb-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Value Map</h2>
-          <p className="text-gray-600">
-            Black and white version showing light and dark relationships
+    <div className="w-full">
+      <div className="mb-4">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-white mb-2">🔳 Value Map</h3>
+          <p className="text-sm text-gray-400">
+            Grayscale showing light and dark relationships
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-2 justify-center sm:justify-end">
+        <div className="flex gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowComparison(!showComparison)}
-            className="flex items-center justify-center gap-2"
+            className="flex items-center gap-2 text-xs bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:text-white"
           >
-            <Contrast className="h-4 w-4" />
-            {showComparison ? 'Hide' : 'Show'} Comparison
+            <Contrast className="h-3 w-3" />
+            {showComparison ? 'Hide' : 'Show'}
           </Button>
           <Button
             variant="default"
             size="sm"
             onClick={downloadValueMap}
-            className="flex items-center justify-center gap-2"
+            className="flex items-center gap-2 text-xs bg-blue-600 hover:bg-blue-700 text-white"
           >
-            <Download className="h-4 w-4" />
+            <Download className="h-3 w-3" />
             Download
           </Button>
         </div>
       </div>
 
-      {showComparison ? (
-        /* Side by Side Comparison */
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="p-3 bg-gray-50 border-b">
-              <h3 className="font-semibold text-gray-900">Original Image</h3>
-            </div>
-            <img
-              src={originalImage}
-              alt="Original"
-              className="w-full h-auto max-h-80 object-contain"
-            />
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="p-3 bg-gray-50 border-b">
-              <h3 className="font-semibold text-gray-900">Value Map</h3>
-            </div>
-            <img
-              src={valueMap}
-              alt="Value Map"
-              className="w-full h-auto max-h-80 object-contain"
-            />
-          </div>
+      {/* Analysis Info */}
+      <div className="bg-gray-700 rounded-lg p-3 mb-4">
+        <div className="text-center mb-3">
+          <p className="text-sm font-medium text-white mb-1">
+            Value Map Analysis Active
+          </p>
+          <p className="text-xs text-gray-400">
+            Main image shows grayscale values for light/shadow analysis
+          </p>
         </div>
-      ) : (
-        /* Single Value Map View */
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <img
-            src={valueMap}
-            alt="Value Map"
-            className="w-full h-auto max-h-96 object-contain mx-auto"
-          />
-        </div>
-      )}
+        
+        {showComparison && (
+          <div className="grid grid-cols-1 gap-3 text-xs">
+            <div className="bg-gray-600 p-2 rounded">
+              <h4 className="font-medium text-white mb-1">Original Colors</h4>
+              <p className="text-gray-300">Full color with hues and saturation</p>
+            </div>
+            <div className="bg-gray-600 p-2 rounded">
+              <h4 className="font-medium text-white mb-1">Value Map</h4>
+              <p className="text-gray-300">Grayscale for form analysis</p>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Artist Tips */}
-      <div className="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
-        <h4 className="font-semibold text-gray-900 mb-2">⚫⚪ Value Study Tips</h4>
-        <div className="text-sm text-gray-700 space-y-1">
-          <p>• <strong>Light values:</strong> Areas that catch the most light (highlights, light planes)</p>
-          <p>• <strong>Dark values:</strong> Shadow areas, cast shadows, and form shadows</p>
-          <p>• <strong>Mid-tones:</strong> Transitional areas between light and shadow</p>
-          <p>• <strong>Painting tip:</strong> Establish your darkest darks and lightest lights first</p>
-          <p>• <strong>Squint test:</strong> If you squint at this value map, you should see the same major shapes as your reference</p>
+      <div className="bg-gray-700 rounded-lg p-3 mb-4">
+        <h4 className="font-medium text-gray-300 mb-2 text-sm">⚫⚪ Value Tips</h4>
+        <div className="text-xs text-gray-400 space-y-1">
+          <p>• <strong>Light values:</strong> Highlights, light planes</p>
+          <p>• <strong>Dark values:</strong> Shadows, form shadows</p>
+          <p>• <strong>Mid-tones:</strong> Transition areas</p>
+          <p>• <strong>Tip:</strong> Establish darks and lights first</p>
         </div>
       </div>
 
       {/* Value Scale Reference */}
-      <div className="mt-4 bg-white rounded-lg shadow-md p-4">
-        <h4 className="font-semibold text-gray-900 mb-3">Value Scale Reference</h4>
-        <div className="flex rounded-lg overflow-hidden border">
+      <div className="bg-gray-700 rounded-lg p-3">
+        <h4 className="font-medium text-gray-300 mb-2 text-sm">Value Scale</h4>
+        <div className="flex rounded overflow-hidden">
           {Array.from({ length: 9 }, (_, i) => (
             <div
               key={i}
-              className="flex-1 h-8 flex items-center justify-center text-xs font-medium"
+              className="flex-1 h-6 flex items-center justify-center text-xs font-medium"
               style={{ 
                 backgroundColor: `rgb(${255 - (i * 32)}, ${255 - (i * 32)}, ${255 - (i * 32)})`,
                 color: i > 4 ? 'white' : 'black'
@@ -119,10 +106,10 @@ export function ValueMap({ originalImage, valueMap }: ValueMapProps) {
             </div>
           ))}
         </div>
-        <div className="flex justify-between mt-1 text-xs text-gray-600">
-          <span>Lightest</span>
-          <span>Mid-tone</span>
-          <span>Darkest</span>
+        <div className="flex justify-between mt-1 text-xs text-gray-400">
+          <span>Light</span>
+          <span>Mid</span>
+          <span>Dark</span>
         </div>
       </div>
     </div>
